@@ -5,7 +5,7 @@ import Photo, {IPhoto} from "../model/gallery";
 export const getPhotos = async (req: Request, res: Response) => {
   try {
     const photos = await Photo.find();
-    res.json(photos);
+    res.json("message: Photos retrieved successfully");
   } catch (error) {
     const castedError = error as Error;
     console.error(castedError.message);
