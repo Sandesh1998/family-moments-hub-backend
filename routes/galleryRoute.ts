@@ -1,10 +1,10 @@
-import { Express } from "express";
-import { getPhotos, uploadPhotos } from "../controller/galleryUploads.Contoller";
-import uploads from "../helper/helper";
+import express from 'express'; 
+import { uploadPhotos, getPhotos } from "../controller/galleryUploads.Contoller";
+import uploadMultiplePhotos from "../helper/helper";
 
-const galleryRoute = (app: Express) => {
-  app.get("/photos", getPhotos);
-  app.post("/photos", uploads.array("photos", 10), uploadPhotos);
-};
+const galleryRoute = express.Router();
+
+galleryRoute.post('/upload', uploadMultiplePhotos, uploadPhotos);
+galleryRoute.get('/photos', getPhotos);
 
 export default galleryRoute;

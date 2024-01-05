@@ -1,6 +1,7 @@
 import connectDB from './config/dbConfig';
 import express from 'express';
 import morgan from 'morgan'; 
+import galleryRoute from './routes/galleryRoute';
 
 const app = express();
 const port = process.env.APP_PORT || 8080;
@@ -12,7 +13,7 @@ app.use(morgan('dev'));
 connectDB();
 
 // routes
-app.use('/familyMoment/api', require('./main.route'));
+app.use('/familyMoment/api/', galleryRoute );
 
 app.get("/ping", (_, res) => {
  res.send("🏓 pong!");
