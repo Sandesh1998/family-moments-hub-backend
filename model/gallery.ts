@@ -1,17 +1,15 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose from 'mongoose';
 
-interface IPhoto extends Document {
- img: {
-   data: Buffer;
-   contentType: string;
- };
+interface Image{
+  filename: string;
+  path: string;
 }
 
-const photoSchema: Schema = new Schema({
- img: {
-   data: Buffer,
-   contentType: String
- }
+const gallerySchema = new mongoose.Schema({
+  title: String,
+  images: [{ type: { filename: String, path: String }}],
 });
 
-export default mongoose.model<IPhoto>('Photo', photoSchema);
+const Gallery = mongoose.model('Gallery', gallerySchema);
+
+export default Gallery;
