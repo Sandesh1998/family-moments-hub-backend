@@ -1,6 +1,7 @@
 import connectDB from './config/dbConfig';
 import express from 'express';
 import morgan from 'morgan'; 
+import path from 'path';
 import galleryRoute from './routes/galleryRoute';
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(morgan('dev'));
 connectDB();
 
 // routes
+app.use('/public',express.static(path.join(import.meta.path+"/../public")))
 app.use('/familyMoment/api/', galleryRoute );
 
 app.get("/ping", (_, res) => {
