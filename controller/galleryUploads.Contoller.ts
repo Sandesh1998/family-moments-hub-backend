@@ -9,12 +9,10 @@ export const uploadPhotos = async (req: Request, res: Response): Promise<void> =
    }
 
    let baseurl = `${req.protocol}://${req.get('host')}`;
-   console.log("first", baseurl)
    const images = (req.files as Express.Multer.File[]).map((file: Express.Multer.File) => ({
     filename: file.filename,
     path: `${baseurl}/public/images/${file.filename}`,
   }));
-  console.log("first", req.files)
 
   // Create a new gallery with the uploaded images
   const newGallery = new Gallery({
