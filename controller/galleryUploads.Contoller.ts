@@ -54,7 +54,7 @@ export const getPhotos = async (
       return;
     }
 
-    const gallery = await Gallery.findOne({ familyKey: familyKey });
+    const gallery = await Gallery.find({ familyKey: familyKey });
 
     if (!gallery) {
       res.status(404).json({ error: "Gallery not found." });
