@@ -1,39 +1,69 @@
 import { Request, Response } from 'express';
 import Gallery from '../model/gallery';
+export const uploadPhotos = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const familyKey = req.headers["family-key"];
 
-export const uploadPhotos = async (req: Request, res: Response): Promise<void> => {
- try {
-   if (!req.files) {
-     res.status(400).send('No files were uploaded.');
-     return;
-   }
+    if (!familyKey) {
+      res.status(401).json({ error: "Family key is required." });
+      return;
+    }
 
-   let baseurl = `${req.protocol}://${req.get('host')}`;
-   const images = (req.files as Express.Multer.File[]).map((file: Express.Multer.File) => ({
-    filename: file.filename,
-    path: `${baseurl}/public/images/${file.filename}`,
-  }));
+    // Check for files after the family key
+    if (!req.files) {
+      res.status(400).send("No files were uploaded.");
+      return;
+    }
 
-  // Create a new gallery with the uploaded images
-  const newGallery = new Gallery({
-    images: images,
-  });
+    let baseurl = `${req.protocol}://${req.get("host")}`;
+    const images = (req.files as Express.Multer.File[]).map(
+      (file: Express.Multer.File) => ({
+        filename: file.filename,
+        path: `${baseurl}/public/images/${file.filename}`,
+      })
+    );
 
-  const savedGallery = await newGallery.save();
+    // Create a new gallery with the uploaded images and associated family key
+    const newGallery = new Gallery({
+      images: images,
+      familyKey: familyKey,
+    });
 
-  res.status(201).json(savedGallery);
-} catch (error) {
-  res.status(500).json({ error: 'Internal Server Error' });
-}
+    const savedGallery = await newGallery.save();
+
+    res.status(201).json(savedGallery);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
+
 // get all photos
-export const getPhotos = async (req: Request, res: Response): Promise<void> => {
+export const getPhotos = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const gallery = await Gallery.find();
-    res.status(200).json({msg: 'All photos', gallery});
+    const familyKey = req.headers["family-key"];
+
+    if (!familyKey) {
+      res.status(401).json({ error: "Family key is required." });
+      return;
+    }
+
+    const gallery = await Gallery.find({ familyKey: familyKey });
+
+    if (!gallery) {
+      res.status(404).json({ error: "Gallery not found." });
+      return;
+    }
+
+    res.status(200).json(gallery);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
