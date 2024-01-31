@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import Gallery from '../model/gallery';
+import { Request, Response } from "express";
+import Gallery from "../model/gallery";
 export const uploadPhotos = async (
   req: Request,
   res: Response
@@ -40,12 +40,8 @@ export const uploadPhotos = async (
   }
 };
 
-
 // get all photos
-export const getPhotos = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const getPhotos = async (req: Request, res: Response): Promise<void> => {
   try {
     const familyKey = req.headers["family-key"];
 
@@ -66,4 +62,3 @@ export const getPhotos = async (
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
